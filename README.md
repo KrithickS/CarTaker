@@ -5,18 +5,17 @@
 ---
 
 ## 📌 Table of Contents
-- [About the Project](#about-the-project)
-- [Project Motivation](#project-motivation)
-- [System Architecture](#system-architecture)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Hardware Components](#hardware-components)
-- [Setup Instructions](#setup-instructions)
-- [Usage](#usage)
-- [Results](#results)
-- [Future Work](#future-work)
-- [Contributors](#contributors)
-- [License](#license)
+- [🧠 About the Project](#-about-the-project)
+- [💡 Project Motivation](#-project-motivation)
+- [🛠️ System Architecture](#️-system-architecture)
+- [✨ Features](#-features)
+- [⚙️ Tech Stack](#️-tech-stack)
+- [🔩 Hardware Components](#-hardware-components)
+- [🧪 Setup Instructions](#-setup-instructions)
+- [▶️ Usage](#️-usage)
+- [📊 Results](#-results)
+- [🚀 Future Work](#-future-work)
+- [👥 Contributors](#-contributors)
 
 ---
 
