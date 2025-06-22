@@ -197,36 +197,126 @@ Ensure `/mnt/nas/recordings/` is mounted (via SMB or CIFS in `/etc/fstab`).
 - Monitor passengers and environment
 - Sync footage to NAS every 5 minutes when internet is available
 
-▶️ Usage
-Startup: When RPi boots, crontab triggers dashcam, systemd starts file sync.
+## ▶️ Usage
 
-Processing: Sensor and camera data continuously monitored.
+Once the system is fully set up and powered on:
 
-Triggering: If unsafe CO₂/temperature or distressed emotion detected, windows open, alerts sent.
+1. **Startup Behavior:**
+   - The Raspberry Pi automatically starts the internal and external camera systems.
+   - The dashcam begins recording as soon as the Pi boots (via `crontab`).
+   - A sync service runs every 5 minutes to check for an internet connection and uploads footage to the NAS.
 
-Footage: Dashcam footage is sent to NAS every 5 minutes if internet is available.
+2. **Real-Time Monitoring:**
+   - The internal camera captures passenger faces and checks their emotional state.
+   - Temperature (DHT22) and CO₂ (MQ135) sensors constantly feed data to the Raspberry Pi.
+   - When thresholds are exceeded or distress is detected, the windows open and an alert is sent.
 
-📊 Results
-Emotion Recognition: Accuracy: 66% (test), 82% (frontal face), 76% (profile)
+3. **Data Sync & Security:**
+   - Footage is stored temporarily on the Raspberry Pi and synced securely via `rsync` to a Tailscale-protected TrueNAS server.
+   - Files are encrypted using AES-256-GCM.
+   - Once acknowledged by the NAS, local copies are deleted to free space.
 
-Face Detection (YOLOv5): 65.8% training accuracy, 64.7% validation
+4. **Fail-Safes:**
+   - If there’s no internet, files wait in queue and retry every 5 minutes.
+   - Systemd ensures sync scripts relaunch after crash or reboot.
 
-System Performance: Fast local decision-making with secure data handling
+---
 
-Storage: AES-256-GCM encryption on TrueNAS, footage recycled every 48 hrs
+## 📊 Results
 
-🚀 Future Work
-Improve low-light accuracy for emotion detection
+### 🔍 Machine Learning Models
 
-Add audio alerts + external speaker support
+- **Face Detection (YOLOv5-inspired):**
+  - Training Accuracy: **65.8%**
+  - Validation Accuracy: **64.7%**
 
-Mobile app integration for real-time alerts
+- **Emotion Recognition (CNN):**
+  - Training Accuracy: **65.87%**
+  - Validation Accuracy: **64.75%**
+  - Test Accuracy: **66%**
 
-Solar-powered backup for offline functioning
+### 🧠 Emotion Detection Details
+- Frontal Faces: **82%** accuracy
+- Profile Faces: **76%**
+- Group Photos: **72%**
+- Occluded Faces: **62%**
+- Low-Light: **58%**
+- Distant Faces: **55%**
 
-👥 Contributors
-Krithick S – krithick.s2022@vitstudent.ac.in
+This enables the system to **reliably detect stress, panic, or discomfort** in typical in-car scenarios.
 
-R. Sacheev Krishanu – sacheevkrishanu.r2022@vitstudent.ac.in
+---
 
-Abishek Devadoss – abishek.devadoss2022@vitstudent.ac.in
+### 🌡️ Environmental Sensors
+
+- **Temperature spikes** from 30°C to 50°C were recorded under direct sunlight within 8–10 minutes.
+- **Humidity** also rose drastically, consistent with real-world car cabin heat profiles.
+- **MQ135 CO₂ Sensor** reliably detected rises in CO₂ after prolonged window closure.
+
+---
+
+### 📹 Dashcam + NAS
+
+- External camera successfully logs footage in `.mkv` format.
+- Crontab and Systemd enable **startup recording and reliable file sync.**
+- **File transfers are encrypted and timestamped**, and successfully auto-delete after confirmation.
+- NAS setup includes:
+  - **228.69 GB** total storage (expandable)
+  - **TrueNAS SCALE** with Tailscale integration
+  - **AES-256-GCM** encryption
+  - **SMB share** for high-speed access
+
+---
+
+✅ **Outcome**: The system demonstrated **real-time emergency response**, **accurate stress detection**, and **secure footage handling** — all within a **fully offline-capable embedded system**.
+
+## 🚀 Future Work
+
+While the current implementation of Caretaker demonstrates strong performance in emergency detection and response, several enhancements can be made in future iterations:
+
+- 📈 **Improve Accuracy of ML Models**  
+  Enhance YOLOv5 and emotion recognition models, especially for:
+  - Occluded or partially visible faces
+  - Low-light or nighttime conditions
+  - Broader emotional spectrum (e.g., sadness, fatigue)
+
+- 📱 **Mobile Application Integration**  
+  Develop an Android/iOS app for:
+  - Real-time alerts
+  - Video previews
+  - Remote window control or override
+
+- 🔊 **Audio Feedback System**  
+  Add external speaker support for:
+  - Verbal alerts (e.g., “Help is on the way”)
+  - Panic-detection confirmation
+
+- 🔋 **Solar/Battery Backup Support**  
+  Integrate an auxiliary power module to ensure:
+  - Continued operation during power failure
+  - Support during engine-off conditions
+
+- 📶 **Edge-to-Cloud Analytics**  
+  Add optional cloud support for:
+  - Data analytics and usage patterns
+  - Alert history and environmental logs
+
+---
+
+## 👥 Contributors
+
+This project was collaboratively developed by the following team from **Vellore Institute of Technology, Chennai Campus**:
+
+- **Krithick S**  
+  `krithick.s2022@vitstudent.ac.in`  
+  _Embedded Systems & ML Integration_
+
+- **R. Sacheev Krishanu**  
+  `sacheevkrishanu.r2022@vitstudent.ac.in`  
+  _Computer Vision & Emotion Detection_
+
+- **Abishek Devadoss**  
+  `abishek.devadoss2022@vitstudent.ac.in`  
+  _Sensor Interface & Dashcam Integration_
+
+We’re always open to contributors! If you're interested in improving this project, feel free to fork the repo and submit a pull request.
