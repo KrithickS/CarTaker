@@ -37,12 +37,18 @@ Numerous fatalities have been reported due to car entrapment caused by door malf
 
 ## 🛠️ System Architecture
 
-[Face & Emotion Detection] [Temp & CO₂ Sensors]
-\ /
-[Raspberry Pi 5] (Decision Engine)
-/
-[Window Trigger + Alerts] [Dashcam Recording ➝ NAS]
+The Caretaker system is built on a modular architecture that separates data collection, processing, and actuation.
 
+- Sensors (CO₂ and temperature) feed real-time data to Raspberry Pi 5.
+- The internal camera captures facial features and emotional states.
+- A window override module is triggered based on safety conditions.
+- An external dashcam continuously records and syncs with a NAS using Tailscale VPN.
+
+### 📷 Hardware Connections Overview
+
+Below is the hardware connection diagram showing how all components interface with the Raspberry Pi:
+
+![Hardware Connections](Hardware_connections.jpg)
 
 ---
 
